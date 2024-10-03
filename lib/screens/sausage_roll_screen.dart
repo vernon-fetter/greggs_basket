@@ -32,6 +32,12 @@ class _SausageRollScreenState extends State<SausageRollScreen> {
   Widget build(BuildContext context) {
     final basketManager = Provider.of<BasketManager>(context);
 
+    double itemPrice = (basketManager.isEatIn
+            ? sausageRoll.eatInPrice
+            : sausageRoll.eatOutPrice) *
+        quantity;
+    String formattedPrice = '£${itemPrice.toStringAsFixed(2)}';
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Greggs Sausage Roll'),
@@ -91,7 +97,7 @@ class _SausageRollScreenState extends State<SausageRollScreen> {
                     basketManager.addItem(sausageRoll, quantity);
                   },
                   child: Text(
-                    'Add to Basket (\$${(basketManager.isEatIn ? sausageRoll.eatInPrice : sausageRoll.eatOutPrice) * quantity})',
+                    'Add to Basket ($formattedPrice)',
                   ),
                 ),
                 SizedBox(height: 20),
