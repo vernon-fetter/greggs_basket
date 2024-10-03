@@ -19,9 +19,20 @@ class BasketSummary extends StatelessWidget {
             itemCount: basketManager.items.length,
             itemBuilder: (context, index) {
               final item = basketManager.items[index];
+              final sausageRoll = item['sausageRoll'];
+              final quantity = item['quantity'];
+
               return ListTile(
-                title: Text(item.articleName),
-                subtitle: Text('Price: \$${item.eatOutPrice.toStringAsFixed(2)}'),
+                title: Text('${sausageRoll.articleName} x $quantity'),
+                subtitle: Text(
+                  'Price: \$${basketManager.isEatIn ? sausageRoll.eatInPrice : sausageRoll.eatOutPrice} x $quantity',
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    basketManager.removeItem(index);
+                  },
+                ),
               );
             },
           ),
@@ -33,6 +44,12 @@ class BasketSummary extends StatelessWidget {
             'Total: \$${basketManager.totalPrice.toStringAsFixed(2)}',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            basketManager.clearBasket();
+          },
+          child: Text('Clear Basket'),
         ),
       ],
     );
