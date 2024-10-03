@@ -21,7 +21,8 @@ class _SausageRollScreenState extends State<SausageRollScreen> {
     internalDescription: 'Sausage Roll',
     customerDescription: 'The Nation’s favourite Sausage Roll.',
     imageUri: 'https://articles.greggs.co.uk/images/1000446.png?1623244287449',
-    thumbnailUri: 'https://articles.greggs.co.uk/images/1000446-thumb.png?1623244287450',
+    thumbnailUri:
+        'https://articles.greggs.co.uk/images/1000446-thumb.png?1623244287450',
     dayParts: ['Breakfast', 'Lunch', 'Evening'],
   );
 
@@ -45,54 +46,65 @@ class _SausageRollScreenState extends State<SausageRollScreen> {
           Text(basketManager.isEatIn ? 'Eat In' : 'Take Out'),
         ],
       ),
-      body: Column(
-        children: [
-          Image.network(sausageRoll.imageUri),
-          SizedBox(height: 10),
-          Text(
-            sausageRoll.articleName,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          Padding(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(sausageRoll.customerDescription),
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    if (quantity > 1) quantity--;
-                  });
-                },
-                icon: Icon(Icons.remove),
-              ),
-              Text('$quantity'),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    quantity++;
-                  });
-                },
-                icon: Icon(Icons.add),
-              ),
-            ],
-          ),
-          ElevatedButton(
-            onPressed: () {
-              basketManager.addItem(sausageRoll, quantity);
-            },
-            child: Text(
-              'Add to Basket (\$${(basketManager.isEatIn ? sausageRoll.eatInPrice : sausageRoll.eatOutPrice) * quantity})',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.network(sausageRoll.imageUri),
+                SizedBox(height: 10),
+                Text(
+                  sausageRoll.articleName,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(sausageRoll.customerDescription),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (quantity > 1) quantity--;
+                        });
+                      },
+                      icon: Icon(Icons.remove),
+                    ),
+                    Text('$quantity'),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          quantity++;
+                        });
+                      },
+                      icon: Icon(Icons.add),
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    basketManager.addItem(sausageRoll, quantity);
+                  },
+                  child: Text(
+                    'Add to Basket (\$${(basketManager.isEatIn ? sausageRoll.eatInPrice : sausageRoll.eatOutPrice) * quantity})',
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Use Expanded to allow ListView to take up remaining space
+                SizedBox(
+                  height: MediaQuery.of(context).size.height *
+                      0.5, // Limiting the height to half of the screen
+                  child: BasketSummary(),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: 20),
-          Expanded(
-            child: BasketSummary(),
-          ),
-        ],
+        ),
       ),
     );
   }
