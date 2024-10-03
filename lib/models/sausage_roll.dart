@@ -43,4 +43,21 @@ class SausageRoll {
       dayParts: List<String>.from(json['dayParts']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'articleCode': articleCode,
+      'shopCode': shopCode,
+      'availableFrom': availableFrom.toIso8601String(),
+      'availableUntil': availableUntil.toIso8601String(),
+      'eatOutPrice': eatOutPrice,
+      'eatInPrice': eatInPrice,
+      'articleName': articleName,
+      'internalDescription': internalDescription,
+      'customerDescription': customerDescription,
+      'imageUri': imageUri,
+      'thumbnailUri': thumbnailUri,
+      'dayParts': dayParts,
+    };
+  }
 }
