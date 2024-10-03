@@ -25,7 +25,7 @@ class BasketSummary extends StatelessWidget {
               return ListTile(
                 title: Text('${sausageRoll.articleName} x $quantity'),
                 subtitle: Text(
-                  'Price: \$${basketManager.isEatIn ? sausageRoll.eatInPrice : sausageRoll.eatOutPrice} x $quantity',
+                  'Price: \£${basketManager.isEatIn ? sausageRoll.eatInPrice : sausageRoll.eatOutPrice} x $quantity',
                 ),
                 trailing: IconButton(
                   icon: Icon(Icons.delete),
@@ -41,7 +41,7 @@ class BasketSummary extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'Total: \$${basketManager.totalPrice.toStringAsFixed(2)}',
+            'Total: \£${basketManager.totalPrice.toStringAsFixed(2)}',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
