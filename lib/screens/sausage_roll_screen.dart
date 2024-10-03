@@ -4,8 +4,12 @@ import '../models/sausage_roll.dart';
 import '../providers/basket_manager.dart';
 import '../widgets/basket_summary.dart';
 
-class SausageRollScreen extends StatelessWidget {
-  // Sample Sausage Roll data, this could also be fetched from a JSON or API
+class SausageRollScreen extends StatefulWidget {
+  @override
+  _SausageRollScreenState createState() => _SausageRollScreenState();
+}
+
+class _SausageRollScreenState extends State<SausageRollScreen> {
   final SausageRoll sausageRoll = SausageRoll(
     articleCode: '1000446',
     shopCode: '1234',
@@ -17,16 +21,29 @@ class SausageRollScreen extends StatelessWidget {
     internalDescription: 'Sausage Roll',
     customerDescription: 'The Nation’s favourite Sausage Roll.',
     imageUri: 'https://articles.greggs.co.uk/images/1000446.png?1623244287449',
-    thumbnailUri:
-        'https://articles.greggs.co.uk/images/1000446-thumb.png?1623244287450',
+    thumbnailUri: 'https://articles.greggs.co.uk/images/1000446-thumb.png?1623244287450',
     dayParts: ['Breakfast', 'Lunch', 'Evening'],
   );
 
+  int quantity = 1;
+
   @override
   Widget build(BuildContext context) {
+    final basketManager = Provider.of<BasketManager>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Greggs Sausage Roll'),
+        actions: [
+          Switch(
+            value: basketManager.isEatIn,
+            onChanged: (value) {
+              basketManager.toggleEatIn();
+            },
+            activeColor: Colors.white,
+          ),
+          Text(basketManager.isEatIn ? 'Eat In' : 'Take Out'),
+        ],
       ),
       body: Column(
         children: [
@@ -41,13 +58,35 @@ class SausageRollScreen extends StatelessWidget {
             child: Text(sausageRoll.customerDescription),
           ),
           SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    if (quantity > 1) quantity--;
+                  });
+                },
+                icon: Icon(Icons.remove),
+              ),
+              Text('$quantity'),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    quantity++;
+                  });
+                },
+                icon: Icon(Icons.add),
+              ),
+            ],
+          ),
           ElevatedButton(
             onPressed: () {
-              Provider.of<BasketManager>(context, listen: false)
-                  .addItem(sausageRoll);
+              basketManager.addItem(sausageRoll, quantity);
             },
             child: Text(
-                'Add to Basket (\$${sausageRoll.eatOutPrice.toStringAsFixed(2)})'),
+              'Add to Basket (\$${(basketManager.isEatIn ? sausageRoll.eatInPrice : sausageRoll.eatOutPrice) * quantity})',
+            ),
           ),
           SizedBox(height: 20),
           Expanded(
